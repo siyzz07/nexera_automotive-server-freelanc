@@ -1,6 +1,9 @@
 
 import app from "./app.js";
+import { dbConfig } from "./config/dbConfig.js";
 import { envConfig } from "./config/envConfig.js";
+
+dbConfig()
 
 
 

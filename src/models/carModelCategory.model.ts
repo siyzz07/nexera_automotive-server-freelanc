@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { ICarModelCategory } from '../interfaces/carModelCategory.interface.js';
+import { ICarModelCategory } from '../shared/types/carModelCategory.interface.js';
 
 const carModelCategorySchema = new Schema<ICarModelCategory>(
   {
