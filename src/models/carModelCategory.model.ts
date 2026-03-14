@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { ICarModelCategory } from '../shared/types/carModelCategory.interface.js';
-
+//dfdfe
 const carModelCategorySchema = new Schema<ICarModelCategory>(
   {
     name: {
