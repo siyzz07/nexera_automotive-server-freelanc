@@ -11,7 +11,7 @@ const carModelCategorySchema = new Schema<ICarModelCategory>(
     parentCategory: {
       type: Schema.Types.ObjectId,
       ref: 'CarModelCategory',
-      default: null, // If null, it's a Brand (like Suzuki). If not null, it's a Model (like Alto) belonging to the parent Brand.
+      default: null,
     },
     description: {
       type: String,

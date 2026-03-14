@@ -1,10 +1,12 @@
 import express from "express";
-import { AuthController } from "../controllers/authController.js";
-
-const authRote = express.Router()
-
-authRote.post('/admin/login',AuthController.)
+import { authControllerInstance } from "../di/authDi.js";
 
 
+const authRoute = express.Router()
 
-export default authRote
+authRoute.post('/admin/login',authControllerInstance.adminLogin)
+authRoute.post('/admin/refresh-token', authControllerInstance.adminRefreshToken)
+
+
+
+export default authRoute

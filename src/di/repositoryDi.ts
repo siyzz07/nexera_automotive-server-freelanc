@@ -1,4 +1,3 @@
 import { AdminRepository } from "../repositories/adminRepository.js";
 
-
-const adminRepository = new AdminRepository()
+export const adminRepository = new AdminRepository()

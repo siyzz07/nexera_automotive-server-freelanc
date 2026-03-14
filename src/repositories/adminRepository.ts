@@ -12,11 +12,13 @@ export class AdminRepository extends BaseRepository<IAdmin>  implements IAdminRe
         super(Admin)
     }
 
-
-
-
-    async findAdminByMail(email: string): Promise<null | { email: string; password: string; }> {
+    async findAdminByMail(email: string): Promise<null | {_id:string, email: string; password: string; }> {
          let result = await this.findOne({email})  
          return result
+    }
+
+    async findAdminById(id: string): Promise<null | {_id:string, email: string; password: string; }> {
+        let result = await this.findById(id)
+        return result
     }
 }
