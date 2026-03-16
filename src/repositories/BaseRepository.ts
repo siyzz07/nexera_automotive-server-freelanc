@@ -32,4 +32,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   async findById(id: string): Promise<any | null> {
     return await this._Model.findById(id).exec();
   }
+
+  async countDocuments(filter: any = {}): Promise<number> {
+    return await this._Model.countDocuments(filter).exec();
+  }
 }

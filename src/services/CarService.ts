@@ -18,9 +18,14 @@ export class CarService implements ICarService {
     const videoUrl = files.video ? files.video[0].path : undefined;
 
     const { model, ...rest } = carData;
+    
+    // Generate simple readable inventory ID
+    const count = await this.carRepository.countDocuments();
+    const inventoryId = `NX-${1000 + count + 1}`;
 
     const formattedData = {
       ...rest,
+      inventoryId,
       carModel: model,
       images: imageUrls,
       video: videoUrl ? { url: videoUrl, duration: parseInt(carData.videoDuration || '0') } : undefined,
@@ -38,5 +43,33 @@ export class CarService implements ICarService {
 
   async getCarById(id: string): Promise<ICar | null> {
     return await this.carRepository.getById(id);
+  }
+
+  async updateCar(id: string, carData: any, files: any): Promise<ICar | null> {
+    const existingCar = await this.carRepository.getById(id);
+    if (!existingCar) return null;
+
+    // Use either new files or existing images
+    const imageUrls = files && files.images 
+      ? files.images.map((file: any) => file.path) 
+      : existingCar.images;
+      
+    const videoUrl = files && files.video 
+      ? files.video[0].path 
+      : existingCar.video?.url;
+
+    const { model, ...rest } = carData;
+
+    const formattedData = {
+      ...rest,
+      carModel: model,
+      images: imageUrls,
+      video: videoUrl ? { url: videoUrl, duration: parseInt(carData.videoDuration || '0') } : existingCar.video,
+      trustBadges: typeof carData.trustBadges === 'string' ? JSON.parse(carData.trustBadges || '[]') : (carData.trustBadges || existingCar.trustBadges),
+      price: carData.price ? parseFloat(carData.price) : existingCar.price,
+      kmDriven: carData.kmDriven ? parseFloat(carData.kmDriven) : existingCar.kmDriven,
+    };
+
+    return await this.carRepository.update(id, formattedData);
   }
 }

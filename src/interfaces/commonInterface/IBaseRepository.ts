@@ -7,4 +7,5 @@ export interface IBaseRepository<T> {
   find(filter?: any): Promise<T[]>;
   findOne(filter: any): Promise<any | null>;
   findById(id: string): Promise<any | null>;
+  countDocuments(filter?: any): Promise<number>;
 }

@@ -3,6 +3,12 @@ import { ICar } from '../shared/types/car.interface.js';
 
 const carSchema = new Schema<ICar>(
   {
+    inventoryId: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     brand: {
       type: Schema.Types.ObjectId,
       ref: 'CarModelCategory',

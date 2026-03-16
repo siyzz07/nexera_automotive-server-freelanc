@@ -51,4 +51,24 @@ export class CarController {
       message: VehicleMessageEnum.VEHICLES_FETCHED_SUCCESS
     });
   };
+
+  updateCar = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const updatedCar = await this.carService.updateCar(id as string, req.body, files);
+
+    if (!updatedCar) {
+      res.status(StatusCodeEnum.NOT_FOUND).json({
+        success: false,
+        message: VehicleMessageEnum.VEHICLE_NOT_FOUND
+      });
+      return;
+    }
+
+    res.status(StatusCodeEnum.OK).json({
+      success: true,
+      data: updatedCar,
+      message: "Vehicle updated successfully"
+    });
+  };
 }

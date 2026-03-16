@@ -2,6 +2,7 @@ import { Document, Types } from 'mongoose';
 import { ICarModelCategory } from './carModelCategory.interface.js';
 
 export interface ICar extends Document {
+  inventoryId: string;
   brand: Types.ObjectId | ICarModelCategory;
   carModel: Types.ObjectId | ICarModelCategory;
   price: number;

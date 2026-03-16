@@ -14,4 +14,9 @@ router.post('/add', upload.fields([
   { name: 'video', maxCount: 1 }
 ]), carController.createCar);
 
+router.put('/:id/update', upload.fields([
+  { name: 'images', maxCount: 5 },
+  { name: 'video', maxCount: 1 }
+]), carController.updateCar);
+
 export default router;
