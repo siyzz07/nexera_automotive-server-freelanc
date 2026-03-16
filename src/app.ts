@@ -13,7 +13,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: ["http://localhost:5174",'nexeramarket.vercel.app'],
+    origin: ["http://localhost:5174",'nexeramarket.vercel.app','https://nexera-automotive-server-freelanc.onrender.com'],
     credentials: true
   })
 );
