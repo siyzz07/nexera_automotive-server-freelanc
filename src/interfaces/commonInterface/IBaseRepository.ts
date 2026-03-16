@@ -1,10 +1,10 @@
-import mongoose, { Document, UpdateQuery } from 'mongoose';
-
-export interface IBaseRepository<T extends Document> {
-  create(item: Partial<T>): Promise<T>;
-  update(id: string, item: UpdateQuery<T>): Promise<T | null>;
+import { UpdateQuery } from 'mongoose';
+ 
+export interface IBaseRepository<T> {
+  create(item: Partial<T>): Promise<any>;
+  update(id: string, item: UpdateQuery<any>): Promise<T | null>;
   delete(id: string): Promise<boolean>;
-  find(filter?: mongoose.FilterQuery<T>): Promise<T[]>;
-  findOne(filter: mongoose.FilterQuery<T>): Promise<T | null>;
-  findById(id: string): Promise<T | null>;
+  find(filter?: any): Promise<T[]>;
+  findOne(filter: any): Promise<any | null>;
+  findById(id: string): Promise<any | null>;
 }
