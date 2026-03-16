@@ -7,6 +7,11 @@ export const envConfig = {
   server: {
     PORT: process.env.PORT || "5000"
   },
+  cloudinary: {
+    CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || 'your_cloud_name',
+    API_KEY: process.env.CLOUDINARY_API_KEY || 'your_api_key',
+    API_SECRET: process.env.CLOUDINARY_API_SECRET || 'your_api_secret',
+  },
 
   dataBase: {
     DATABASE_URL: process.env.DATABASE_URL || ''

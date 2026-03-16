@@ -12,7 +12,12 @@ export interface ICar extends Document {
   ownerHistory: '1st Owner' | '2nd Owner' | '3rd Owner' | '4+ Owners';
   color: string;
   location: string;
-  primaryImage?: string;
+  description?: string;
+  images: string[];
+  video?: {
+    url: string;
+    duration: number;
+  };
   trustBadges: string[];
   status: 'Available' | 'Sold' | 'Reserved';
   createdAt: Date;

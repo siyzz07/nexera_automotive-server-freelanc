@@ -55,8 +55,18 @@ const carSchema = new Schema<ICar>(
       required: true,
       trim: true,
     },
-    primaryImage: {
+    description: {
       type: String,
+      trim: true,
+    },
+    images: {
+      type: [String],
+      required: true,
+      validate: [(val: string[]) => val.length >= 1 && val.length <= 5, 'Between 1 and 5 images are required']
+    },
+    video: {
+      url: String,
+      duration: Number
     },
     trustBadges: {
       type: [String],

@@ -9,41 +9,36 @@ export class CarModelCategoryController {
     this.categoryService = categoryService;
   }
 
-  addCategory = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const category = await this.categoryService.addCategory(req.body);
-      res.status(StatusCodeEnum.OK).json({ success: true, data: category });
-    } catch (error: any) {
-      res.status(StatusCodeEnum.INTERNAL_SERVER_ERROR).json({ success: false, message: error.message });
-    }
+  addCategory = async (req: Request, res: Response) => {
+    const category = await this.categoryService.addCategory(req.body);
+    res.status(StatusCodeEnum.OK).json({ success: true, data: category });
   };
 
-  getAllCategories = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const categories = await this.categoryService.getAllCategories();
-      res.status(StatusCodeEnum.OK).json({ success: true, data: categories });
-    } catch (error: any) {
-      res.status(StatusCodeEnum.INTERNAL_SERVER_ERROR).json({ success: false, message: error.message });
-    }
+  getAllCategories = async (req: Request, res: Response) => {
+    const categories = await this.categoryService.getAllCategories();
+    res.status(StatusCodeEnum.OK).json({ success: true, data: categories });
   };
 
-  updateCategory = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { id } = req.params;
-      const category = await this.categoryService.updateCategory(id as string, req.body);
-      res.status(StatusCodeEnum.OK).json({ success: true, data: category });
-    } catch (error: any) {
-      res.status(StatusCodeEnum.INTERNAL_SERVER_ERROR).json({ success: false, message: error.message });
-    }
+  updateCategory = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const category = await this.categoryService.updateCategory(id as string, req.body);
+    res.status(StatusCodeEnum.OK).json({ success: true, data: category });
   };
 
-  deleteCategory = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { id } = req.params;
-      await this.categoryService.deleteCategory(id as string);
-      res.status(StatusCodeEnum.OK).json({ success: true, message: 'Category deleted successfully' });
-    } catch (error: any) {
-      res.status(StatusCodeEnum.INTERNAL_SERVER_ERROR).json({ success: false, message: error.message });
-    }
+  deleteCategory = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await this.categoryService.deleteCategory(id as string);
+    res.status(StatusCodeEnum.OK).json({ success: true, message: 'Category deleted successfully' });
+  };
+
+  getBrands = async (req: Request, res: Response) => {
+    const brands = await this.categoryService.getBrands();
+    res.status(StatusCodeEnum.OK).json({ success: true, data: brands });
+  };
+
+  getModelsByBrand = async (req: Request, res: Response) => {
+    const { brandId } = req.params;
+    const models = await this.categoryService.getModelsByBrand(brandId as string);
+    res.status(StatusCodeEnum.OK).json({ success: true, data: models });
   };
 }
