@@ -12,12 +12,19 @@ export class CarRepository extends BaseRepository<ICar> implements ICarRepositor
     return await this._Model.find({ fuelType }).exec();
   }
 
-  async findAllAvailable(): Promise<ICar[]> {
-    return await this._Model.find({ status: 'Available' })
-      .populate('brand')
-      .populate('carModel')
-      .sort({ createdAt: -1 })
-      .exec() as any; 
+  async findAllAvailable(page: number, limit: number): Promise<{ cars: ICar[]; totalCars: number }> {
+    const skip = (page - 1) * limit;
+    const [cars, totalCars] = await Promise.all([
+      this._Model.find({ status: 'Available' })
+        .populate('brand')
+        .populate('carModel')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .exec() as any,
+      this._Model.countDocuments({ status: 'Available' })
+    ]);
+    return { cars, totalCars };
   }
 
   async getById(id: string): Promise<ICar | null> {

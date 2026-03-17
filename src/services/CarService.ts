@@ -37,8 +37,8 @@ export class CarService implements ICarService {
     return await this.carRepository.create(formattedData);
   }
 
-  async getAllAvailableCars(): Promise<ICar[]> {
-    return await this.carRepository.findAllAvailable();
+  async getAllAvailableCars(page: number, limit: number): Promise<{ cars: ICar[]; totalCars: number }> {
+    return await this.carRepository.findAllAvailable(page, limit);
   }
 
   async getCarById(id: string): Promise<ICar | null> {

@@ -24,11 +24,21 @@ export class CarController {
   };
 
   getCars = async (req: Request, res: Response) => {
-    const cars = await this.carService.getAllAvailableCars();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 8;
+
+    const { cars, totalCars } = await this.carService.getAllAvailableCars(page, limit);
+    const totalPages = Math.ceil(totalCars / limit);
 
     res.status(StatusCodeEnum.OK).json({
       success: true,
       data: cars,
+      meta: {
+        totalCars,
+        totalPages,
+        currentPage: page,
+        limit
+      },
       message: VehicleMessageEnum.VEHICLES_FETCHED_SUCCESS
     });
   };
