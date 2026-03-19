@@ -19,5 +19,7 @@ router.put('/:id/update', upload.fields([
   { name: 'images', maxCount: 5 },
   { name: 'video', maxCount: 1 }
 ]), carController.updateCar);
+router.patch('/:id/status', carController.updateCarStatus);
+router.delete('/:id/delete', carController.deleteCar);
 
 export default router;

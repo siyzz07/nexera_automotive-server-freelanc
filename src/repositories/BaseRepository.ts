@@ -13,7 +13,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   }
 
   async update(id: string, item: UpdateQuery<any>): Promise<T | null> {
-    return await this._Model.findByIdAndUpdate(id, item, { new: true }).exec();
+    return await this._Model.findByIdAndUpdate(id, item, { returnDocument: 'after' }).exec();
   }
 
   async delete(id: string): Promise<boolean> {

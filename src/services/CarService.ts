@@ -53,21 +53,35 @@ export class CarService implements ICarService {
     const existingCar = await this.carRepository.getById(id);
     if (!existingCar) return null;
 
-    // Use either new files or existing images
-    const imageUrls = files && files.images 
-      ? files.images.map((file: any) => file.path) 
-      : existingCar.images;
+    // Implementation of Media Merging Protocol
+    let imageUrls: string[] = [];
+    
+    // 1. Process existing images sent via carData (preserved by user)
+    if (carData.existingImages) {
+      imageUrls = typeof carData.existingImages === 'string' 
+        ? JSON.parse(carData.existingImages) 
+        : carData.existingImages;
+    } else if (!files?.images) {
+      // Fallback if frontend didn't specically send existingImages and no new ones are uploaded
+      imageUrls = existingCar.images;
+    }
+
+    // 2. Append newly uploaded images
+    if (files && files.images) {
+      const newUrls = files.images.map((file: any) => file.path);
+      imageUrls = [...imageUrls, ...newUrls];
+    }
       
     const videoUrl = files && files.video 
       ? files.video[0].path 
-      : existingCar.video?.url;
+      : (carData.videoUrl || existingCar.video?.url);
 
     const { model, ...rest } = carData;
 
     const formattedData = {
       ...rest,
       carModel: model,
-      images: imageUrls,
+      images: imageUrls.slice(0, 5), // Cap at 5 mission-critical items
       video: videoUrl ? { url: videoUrl, duration: parseInt(carData.videoDuration || '0') } : existingCar.video,
       trustBadges: typeof carData.trustBadges === 'string' ? JSON.parse(carData.trustBadges || '[]') : (carData.trustBadges || existingCar.trustBadges),
       price: carData.price ? parseFloat(carData.price) : existingCar.price,
@@ -75,6 +89,10 @@ export class CarService implements ICarService {
     };
 
     return await this.carRepository.update(id, formattedData);
+  }
+
+  async deleteCar(id: string): Promise<boolean> {
+    return await this.carRepository.delete(id);
   }
 
   async getSearchFilters(): Promise<any> {

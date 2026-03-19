@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import authRoute from './routes/authRoutes.js'
 import categoryRoute from './routes/categoryRoutes.js'
 import carRoute from './routes/carRoutes.js'
+import contactRoute from './routes/contactRoutes.js'
 import { errorHandler } from './middleware/errorHandling.js'
 
 const app = express()
@@ -23,6 +24,7 @@ app.use(express.json())
 app.use('/api/auth', authRoute)
 app.use('/api/category', categoryRoute)
 app.use('/api/car', carRoute)
+app.use('/api/contact', contactRoute)
 
 app.use(errorHandler)
 

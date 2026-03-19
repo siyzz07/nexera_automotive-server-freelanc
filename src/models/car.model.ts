@@ -41,7 +41,7 @@ const carSchema = new Schema<ICar>(
     },
     bodyType: {
       type: String,
-      enum: ['Sedan', 'SUV', 'Coupe', 'Hatchback', 'Convertible', 'Wagon', 'Truck'],
+      enum: ['Sedan', 'SUV', 'Compact SUV','Coupe', 'Hatchback', 'Convertible', 'Wagon', 'Truck'],
       default: 'Sedan',
       required: true,
     },

@@ -5,5 +5,6 @@ export interface ICarService {
   getAllAvailableCars(page: number, limit: number, filters?: any): Promise<{ cars: ICar[]; totalCars: number }>;
   getCarById(id: string): Promise<ICar | null>;
   updateCar(id: string, carData: any, files: any): Promise<ICar | null>;
+  deleteCar(id: string): Promise<boolean>;
   getSearchFilters(): Promise<any>;
 }

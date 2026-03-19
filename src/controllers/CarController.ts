@@ -26,9 +26,9 @@ export class CarController {
   getCars = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 8;
-    const { brand, model, budget, bodyType, kmDriven, fuelType, transmission, ownerHistory, color, location, query } = req.query;
+    const { brand, carModel, model, budget, bodyType, kmDriven, fuelType, transmission, ownerHistory, color, location, query, sortBy, order, status, isAdmin } = req.query;
 
-    const filters = { brand, model, budget, bodyType, kmDriven, fuelType, transmission, ownerHistory, color, location, query };
+    const filters = { brand, carModel, model, budget, bodyType, kmDriven, fuelType, transmission, ownerHistory, color, location, query, sortBy, order, status, isAdmin };
 
     const { cars, totalCars } = await this.carService.getAllAvailableCars(page, limit, filters);
     const totalPages = Math.ceil(totalCars / limit);
@@ -82,6 +82,37 @@ export class CarController {
       success: true,
       data: updatedCar,
       message: "Vehicle updated successfully"
+    });
+  };
+
+  updateCarStatus = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    
+    const updatedCar = await this.carService.updateCar(id as string, { status }, {});
+
+    if (!updatedCar) {
+      res.status(StatusCodeEnum.NOT_FOUND).json({
+        success: false,
+        message: VehicleMessageEnum.VEHICLE_NOT_FOUND
+      });
+      return;
+    }
+
+    res.status(StatusCodeEnum.OK).json({
+      success: true,
+      data: updatedCar,
+      message: "Vehicle status updated successfully"
+    });
+  };
+
+  deleteCar = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await this.carService.deleteCar(id as string);
+
+    res.status(StatusCodeEnum.OK).json({
+      success: true,
+      message: "Vehicle listing removed successfully from inventory"
     });
   };
 
