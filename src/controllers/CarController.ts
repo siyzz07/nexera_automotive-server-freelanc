@@ -26,8 +26,11 @@ export class CarController {
   getCars = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 8;
+    const { brand, model, budget, bodyType, kmDriven, fuelType, transmission, ownerHistory, color, location, query } = req.query;
 
-    const { cars, totalCars } = await this.carService.getAllAvailableCars(page, limit);
+    const filters = { brand, model, budget, bodyType, kmDriven, fuelType, transmission, ownerHistory, color, location, query };
+
+    const { cars, totalCars } = await this.carService.getAllAvailableCars(page, limit, filters);
     const totalPages = Math.ceil(totalCars / limit);
 
     res.status(StatusCodeEnum.OK).json({
@@ -79,6 +82,15 @@ export class CarController {
       success: true,
       data: updatedCar,
       message: "Vehicle updated successfully"
+    });
+  };
+
+  getSearchFilters = async (_req: Request, res: Response) => {
+    const filters = await this.carService.getSearchFilters();
+    res.status(StatusCodeEnum.OK).json({
+      success: true,
+      data: filters,
+      message: "Search filters fetched successfully"
     });
   };
 }

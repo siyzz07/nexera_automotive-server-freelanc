@@ -6,6 +6,7 @@ const router = Router();
 
 
 router.get('/', carController.getCars);
+router.get('/filters', carController.getSearchFilters);
 router.get('/:id', carController.getCarById);
 
 

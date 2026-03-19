@@ -8,4 +8,5 @@ export interface IBaseRepository<T> {
   findOne(filter: any): Promise<any | null>;
   findById(id: string): Promise<any | null>;
   countDocuments(filter?: any): Promise<number>;
+  getDistinctValues(field: string, filter?: any): Promise<any[]>;
 }

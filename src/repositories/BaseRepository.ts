@@ -36,4 +36,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   async countDocuments(filter: any = {}): Promise<number> {
     return await this._Model.countDocuments(filter).exec();
   }
+
+  async getDistinctValues(field: string, filter: any = {}): Promise<any[]> {
+    return await this._Model.distinct(field, filter).exec();
+  }
 }

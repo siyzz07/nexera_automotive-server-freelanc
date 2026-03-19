@@ -2,9 +2,13 @@ import { ICarRepository } from '../interfaces/productInterface/ICarRepository.js
 import { ICarService } from '../interfaces/productInterface/ICarService.js';
 import { ICar } from '../shared/types/car.interface.js';
 import { VehicleMessageEnum } from '../enums/ErrorMessageEnums.js';
+import { ICarModelCategoryRepository } from '../interfaces/categoryInterface/ICarModelCategoryRepository.js';
 
 export class CarService implements ICarService {
-  constructor(private carRepository: ICarRepository) {}
+  constructor(
+    private carRepository: ICarRepository,
+    private categoryRepository: ICarModelCategoryRepository
+  ) {}
 
   async createCar(carData: any, files: any): Promise<ICar> {
     if (!files || !files.images || files.images.length < 1) {
@@ -37,8 +41,8 @@ export class CarService implements ICarService {
     return await this.carRepository.create(formattedData);
   }
 
-  async getAllAvailableCars(page: number, limit: number): Promise<{ cars: ICar[]; totalCars: number }> {
-    return await this.carRepository.findAllAvailable(page, limit);
+  async getAllAvailableCars(page: number, limit: number, filters?: any): Promise<{ cars: ICar[]; totalCars: number }> {
+    return await this.carRepository.findAllAvailable(page, limit, filters);
   }
 
   async getCarById(id: string): Promise<ICar | null> {
@@ -71,5 +75,38 @@ export class CarService implements ICarService {
     };
 
     return await this.carRepository.update(id, formattedData);
+  }
+
+  async getSearchFilters(): Promise<any> {
+    const [
+      locations,
+      fuelTypes,
+      transmissions,
+      bodyTypes,
+      ownerHistories,
+      colors,
+      brands,
+      models
+    ] = await Promise.all([
+      this.carRepository.getDistinctValues('location', { status: 'Available' }),
+      this.carRepository.getDistinctValues('fuelType', { status: 'Available' }),
+      this.carRepository.getDistinctValues('transmission', { status: 'Available' }),
+      this.carRepository.getDistinctValues('bodyType', { status: 'Available' }),
+      this.carRepository.getDistinctValues('ownerHistory', { status: 'Available' }),
+      this.carRepository.getDistinctValues('color', { status: 'Available' }),
+      this.categoryRepository.findBrands(),
+      this.categoryRepository.find({ parentCategory: { $ne: null } })
+    ]);
+
+    return {
+      locations: ['All', ...locations],
+      fuelTypes: ['All', ...fuelTypes],
+      transmissions: ['All', ...transmissions],
+      bodyTypes: ['All', ...bodyTypes],
+      ownerHistories: ['All', ...ownerHistories],
+      colors: ['All', ...colors],
+      brands: brands.map(b => ({ id: b._id, name: b.name })),
+      models: models.map(m => ({ id: m._id, name: m.name, brandId: m.parentCategory }))
+    };
   }
 }
