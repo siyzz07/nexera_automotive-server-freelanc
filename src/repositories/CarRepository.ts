@@ -2,6 +2,7 @@ import { Car } from '../models/car.model.js';
 import { ICar } from '../shared/types/car.interface.js';
 import { ICarRepository } from '../interfaces/productInterface/ICarRepository.js';
 import { BaseRepository } from './BaseRepository.js';
+import { CarModelCategory } from '../models/carModelCategory.model.js';
 
 export class CarRepository extends BaseRepository<ICar> implements ICarRepository {
   constructor() {
@@ -50,10 +51,19 @@ export class CarRepository extends BaseRepository<ICar> implements ICarRepositor
 
     // Keyword Search
     if (filters.query) {
+      // Find matching categories (brands or models) to include in the search
+      const matchingCategories = await CarModelCategory.find({
+        name: { $regex: filters.query, $options: 'i' }
+      }).select('_id').lean();
+      
+      const categoryIds = matchingCategories.map(cat => cat._id);
+
       query.$or = [
         { fuelType: { $regex: filters.query, $options: 'i' } },
         { location: { $regex: filters.query, $options: 'i' } },
-        { bodyType: { $regex: filters.query, $options: 'i' } }
+        { bodyType: { $regex: filters.query, $options: 'i' } },
+        { brand: { $in: categoryIds } },
+        { carModel: { $in: categoryIds } }
       ];
     }
 
