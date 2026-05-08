@@ -14,7 +14,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: ["http://localhost:5174", "https://nexeramarket.vercel.app",'https://nexeramarket.com'],
+    origin: ["http://localhost:5174", "https://nexeramarket.vercel.app",'https://nexeramarket.com','https://www.nexeramarket.com',"https://nexeramarket.com"],
     credentials: true
   })
 );
